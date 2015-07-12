@@ -5,8 +5,11 @@
 ## Fragment
 
 FragmentからでもrequestPermissionsできる。
+
 FragmentにもonRequestPermissionsResultあるから、Overrideしてそこで受け取る
+
 もはやPermissionの要求は、Fragment使ってmoduleみたいにした方がいいアプリもあるかもなー。
+
 設計次第か。Activityに書くのはわりと煩雑になりそうな気がする。
 
 checkSelfPermissionとかはContextじゃないとダメっぽい。
@@ -56,20 +59,20 @@ Permission RequestのDialogが出なかった。
 例外とかにはならない。
 
 
-
-
 ## 保存先周り
 
+```
 /data/system/users/{userId}/runtime-permissions.xml
+```
 
 /data/system/users/{userId}配下には、各ユーザの設定ファイル等がある。
+
 Settingsのファイルとかウィジットの位置とか色々。
+
 そこにPermissionのファイルもある = マルチユーザではユーザごとにPermissionの設定を持つ
 
 権限は以下のようになってるから、通常のアプリ等から読み取れない。
 Systemプロセス関連だけ。
-
-
 
 ```
 -rw------- system   system      12227 2015-07-08 00:17 runtime-permissions.xml
@@ -82,8 +85,6 @@ Systemプロセス関連だけ。
 http://tools.oesf.biz/android-MNC/xref/com/android/server/pm/PermissionsState.java#PERMISSION_OPERATION_FAILURE
 
 ココらへんの定数関係あるかも
-
-
 
 Permissionを要求する必要のないアプリのパッケージ名は記載されないっぽい
 
@@ -98,8 +99,11 @@ Permissionを要求する必要のないアプリのパッケージ名は記載�
 
 ## Stting画面のPermission
 
+```
 com.android.packageinstaller/.permission.ui.ManagePermissionsActivity
+```
 
+```
 Active Fragments in e200fdf:
   #0: AppPermissionsFragment{df6e42c #0 id=0x1020002}
     mFragmentId=#1020002 mContainerId=#1020002 mTag=null
@@ -118,32 +122,38 @@ Active Fragments in e200fdf:
         mContainer=android.app.Fragment$1@5575571
         mParent=AppPermissionsFragment{df6e42c #0 id=0x1020002}
         mCurState=5 mStateSaved=false mDestroyed=false
+```
 
-
+```
 I/ActivityManager( 1336): START u0 {act=android.intent.action.MANAGE_APP_PERMISSIONS cmp=com.android.packageinstaller/.permission.ui.ManagePermissionsActivity (has extras)} from uid 1000 on display 0
 V/WindowManager( 1336): addAppToken: AppWindowToken{fa8b3d3 token=Token{49449c2 ActivityRecord{3dfd60d u0 com.android.packageinstaller/.permission.ui.ManagePermissionsActivity t43}}} to stack=6 task=43 at 3
 V/WindowManager( 1336): Adding window Window{dc0c609 u0 com.android.packageinstaller/com.android.packageinstaller.permission.ui.ManagePermissionsActivity} at 6 of 10 (after Window{da79774 u0 com.android.settings/com.android.settings.SubSettings})
 I/ActivityManager( 1336): Displayed com.android.packageinstaller/.permission.ui.ManagePermissionsActivity: +800ms
-
+```
 
 ### adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONSの結果
 
+```
 E/StrictMode( 2510): class com.android.packageinstaller.permission.ui.ManagePermissionsActivity; instances=3; limit=1
 E/StrictMode( 2510): android.os.StrictMode$InstanceCountViolation: class com.android.packageinstaller.permission.ui.ManagePermissionsActivity; instances=3; limit=1
 E/StrictMode( 2510): 	at android.os.StrictMode.setClassInstanceLimit(StrictMode.java:1)
-
+```
 
 ### log
 
+```
 I snet_event_log: [permissions_requested,10059,com.os.operando.m_preview_sample:android.permission-group.PHONE|true|0]
 
 I snet_event_log: [permissions_toggled,10042,com.os.operando.m_preview_sample:android.permission-group.PHONE|false|1]
+```
 
 ### Other
 
+```
 /system/app/PackageInstaller/PackageInstaller.apk
+```
 
-
+```
 <activity android:configChanges="keyboardHidden|orientation|screenSize" android:excludeFromRecents="true" android:label="@string/app_permissions" android:name=".permission.ui.ManagePermissionsActivity" android:permission="android.permission.GRANT_REVOKE_PERMISSIONS" android:theme="@style/Settings">
     <intent-filter>
         <action android:name="android.intent.action.MANAGE_PERMISSIONS"/>
@@ -152,6 +162,7 @@ I snet_event_log: [permissions_toggled,10042,com.os.operando.m_preview_sample:an
         <category android:name="android.intent.category.DEFAULT"/>
     </intent-filter>
 </activity>
+```
 
 #### adb shell dumpsys package
 
@@ -338,8 +349,6 @@ Explain why you need permissions
 com.android.packageinstaller/.permission.ui.ManagePermissionsActivity + AppPermissionsFragment
 
 
-
-
 ## Souce
 
 ### pm revoke
@@ -350,6 +359,3 @@ http://tools.oesf.biz/android-5.0.0_r2.0/xref/frameworks/base/cmds/pm/src/com/an
 
 
 http://tools.oesf.biz/android-5.0.0_r2.0/xref/frameworks/base/services/core/java/com/android/server/pm/GrantedPermissions.java#GrantedPermissions
-
-
-a
