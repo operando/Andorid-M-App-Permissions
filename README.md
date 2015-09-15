@@ -359,3 +359,70 @@ http://tools.oesf.biz/android-5.0.0_r2.0/xref/frameworks/base/cmds/pm/src/com/an
 
 
 http://tools.oesf.biz/android-5.0.0_r2.0/xref/frameworks/base/services/core/java/com/android/server/pm/GrantedPermissions.java#GrantedPermissions
+
+
+
+## Memo
+
+
+mArguments=Bundle[{android.intent.extra.PACKAGE_NAME=com.kouzoh.mercari}]
+
+```bash
+adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONS -e android.intent.extra.PACKAGE_NAME com.kouzoh.mercari
+```
+
+```java
+Intent i = new Intent();
+i.setAction("android.intent.action.MANAGE_APP_PERMISSIONS");
+i.putExtra("android.intent.extra.PACKAGE_NAME", "com.kouzoh.mercari");
+startActivity(i);
+```
+
+```java
+// Intent.java - SKD 23
+
+/**
+ * Intent extra: An app package name.
+ * <p>
+ * Type: String
+ * </p>
+ *
+ * @hide
+ */
+@SystemApi
+public static final String EXTRA_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
+
+
+/**
+ * Activity action: Launch UI to manage the permissions of an app.
+ * <p>
+ * Input: {@link #EXTRA_PACKAGE_NAME} specifies the package whose permissions
+ * will be managed by the launched UI.
+ * </p>
+ * <p>
+ * Output: Nothing.
+ * </p>
+ *
+ * @see #EXTRA_PACKAGE_NAME
+ *
+ * @hide
+ */
+@SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+public static final String ACTION_MANAGE_APP_PERMISSIONS =
+        "android.intent.action.MANAGE_APP_PERMISSIONS";
+
+/**
+  * Activity action: Launch UI to manage permissions.
+  * <p>
+  * Input: Nothing.
+  * </p>
+  * <p>
+  * Output: Nothing.
+  * </p>
+  *
+  * @hide
+  */
+ @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+ public static final String ACTION_MANAGE_PERMISSIONS =
+         "android.intent.action.MANAGE_PERMISSIONS";
+```
